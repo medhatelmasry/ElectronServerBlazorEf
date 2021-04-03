@@ -7,6 +7,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,6 +17,7 @@
     <link href="css/site.css" rel="stylesheet" />
     <link href="ElectronServerBlazorEf.styles.css" rel="stylesheet" />
 </head>
+
 <body>
     <component type="typeof(App)" render-mode="ServerPrerendered" />
 
@@ -31,5 +33,11 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+    <!-- This is the glue between Blazor and Chart.js -->
+    <script src="_content/ChartJs.Blazor.Fork/ChartJsBlazorInterop.js"></script>
 </body>
+
 </html>

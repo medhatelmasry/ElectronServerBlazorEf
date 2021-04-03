@@ -1,0 +1,56 @@
+﻿@page "/pie"
+@using ChartJs.Blazor.PieChart
+@inject ElectronServerBlazorEf.Data.NorthwindService service
+
+<h1>Categories by product</h1>
+
+@if (_config == null)
+{
+  <p><em>Loading...</em></p>
+}
+else
+{
+  <Chart Config="_config"></Chart>
+}
+
+
+@code {
+  private PieConfig _config;
+  protected override async Task OnInitializedAsync()
+  {
+    _config = new PieConfig
+    {
+      Options = new PieOptions
+      {
+        Responsive = true,
+        Title = new OptionsTitle
+        {
+          Display = true,
+          Text = "Northwind database products by categories"
+        }
+      }
+    };
+
+    List<object> products = await service.GetCategoriesByProductAsync();
+
+    foreach (var item in products) {
+      _config.Data.Labels.Add(item.GetType().GetProperty("Name").GetValue(item).ToString());
+    }
+
+    List<int> countsList = new List<int>();
+    List<string> colorsList = new List<string>();
+    Random rand = new Random();
+    foreach (var item in products) {
+      countsList.Add((int)item.GetType().GetProperty("Count").GetValue(item));
+      // generate random colors for the pie chart
+      colorsList.Add(ColorUtil.ColorHexString((byte) rand.Next(256), (byte) rand.Next(256), (byte) rand.Next(256)));
+    }
+
+    PieDataset<int> dataset = new PieDataset<int>(countsList.ToArray<int>())
+    {
+      BackgroundColor = colorsList.ToArray()
+    };
+
+    _config.Data.Datasets.Add(dataset);
+  }
+}
